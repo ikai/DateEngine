@@ -4,6 +4,10 @@
            xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 		  http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
            version="2.5">
+    <filter>
+        <filter-name>RequireLoginFilter</filter-name>
+        <filter-class>com.dateengine.filters.RequireLoginFilter</filter-class>
+    </filter>
 
     <servlet>
         <servlet-name>HomeServlet</servlet-name>
@@ -14,4 +18,10 @@
         <servlet-name>HomeServlet</servlet-name>
         <url-pattern>/home</url-pattern>
     </servlet-mapping>
+
+    <filter-mapping>
+        <filter-name>RequireLoginFilter</filter-name>
+        <servlet-name>HomeServlet</servlet-name>
+    </filter-mapping>
+
 </web-app>

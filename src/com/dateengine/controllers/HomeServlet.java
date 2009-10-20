@@ -10,6 +10,7 @@ import java.io.IOException;
 public class HomeServlet extends HttpServlet {
 
    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
       RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/templates/home.jsp");
 
       dispatcher.forward(request, response);
