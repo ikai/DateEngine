@@ -7,12 +7,7 @@
   <head><title>View Profile</title></head>
   <body>
     <h1>Viewing ${profile.username}'s Profile</h1>
-    <div class="nav">
-        <span class="nav-item">
-            <a href="/profile/mine">View My Profile</a> |
-            <a href="/profile/edit">Edit Profile</a>
-        </span>
-    </div>
+    <%@ include file="../shared/navigation.jsp" %>
 
     <div class="aboutMe">
         <h2>About me</h2>
