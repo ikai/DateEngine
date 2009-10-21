@@ -1,7 +1,7 @@
 package com.dateengine.controllers;
 
 import com.dateengine.PMF;
-import com.dateengine.Profile;
+import com.dateengine.models.Profile;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +22,7 @@ public class BrowseServlet extends HttpServlet {
       List<Profile> profiles;
 
       try {
-         profiles = (List<Profile>) query.execute();            
+         profiles = (List<Profile>) query.execute();
       } finally {
          query.closeAll();
       }

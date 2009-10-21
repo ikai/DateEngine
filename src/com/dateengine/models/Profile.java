@@ -1,4 +1,4 @@
-package com.dateengine;
+package com.dateengine.models;
 
 import javax.jdo.annotations.*;
 import javax.jdo.PersistenceManager;
@@ -7,6 +7,7 @@ import javax.jdo.JDOObjectNotFoundException;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Key;
+import com.dateengine.PMF;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class Profile {

@@ -3,7 +3,7 @@ package com.dateengine.controllers;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
-import com.dateengine.Profile;
+import com.dateengine.models.Profile;
 import com.dateengine.PMF;
 
 import javax.servlet.http.HttpServlet;
