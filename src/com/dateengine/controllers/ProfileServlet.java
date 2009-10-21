@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletException;
 import javax.servlet.RequestDispatcher;
 import javax.jdo.PersistenceManager;
+import javax.jdo.JDOObjectNotFoundException;
+import javax.jdo.JDOFatalUserException;
 import java.io.IOException;
 
 public class ProfileServlet extends HttpServlet {
@@ -86,8 +88,27 @@ public class ProfileServlet extends HttpServlet {
 
 
 
-   private void doViewProfile(HttpServletRequest request, HttpServletResponse response) {
+   private void doViewProfile(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+      String encodedKey = request.getParameter("id");
+      Key key           = KeyFactory.stringToKey(encodedKey);
 
+      PersistenceManager pm = PMF.get().getPersistenceManager();
+      Profile profile = null;
+      try {
+         profile = pm.getObjectById(Profile.class, key);
+      } catch (JDOObjectNotFoundException e) {
+         // Render a 404 or some page that says profile not found
+         response.sendError(404, "Profile not found");
+      } catch (JDOFatalUserException e) { // This means we have a bad key
+         response.sendError(404, "Profile not found");
+      } finally {
+         pm.close();
+      }
+
+      request.setAttribute("profile", profile);
+      RequestDispatcher dispatcher = request.getRequestDispatcher(VIEW_PROFILE_TEMPLATE);
+      dispatcher.forward(request, response);
    }
 
    private void doViewMyProfile(HttpServletRequest request, HttpServletResponse response)

@@ -11,8 +11,13 @@
         <ul>
         <c:forEach var="profile" items="${profiles}">
             <li class="mini-profile">
-                <h3>${profile.username}</h3>
+                <h3>
+                    <a href="/profile/view?id=${profile.encodedKey}">${profile.username}</a>
+                </h3>
                 <p>
+                    <p>
+                        ${profile.key}
+                    </p>
                     ${profile.aboutMe}
                 </p>
             </li>

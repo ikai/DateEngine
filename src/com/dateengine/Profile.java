@@ -51,6 +51,10 @@ public class Profile {
       return profile;
    }
 
+   public String getEncodedKey(){
+      return KeyFactory.keyToString(this.key);
+   }
+
    public Key getKey() {
       return key;
    }
