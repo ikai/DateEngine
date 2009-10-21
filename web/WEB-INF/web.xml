@@ -17,6 +17,10 @@
         <servlet-name>ProfileServlet</servlet-name>
         <servlet-class>com.dateengine.controllers.ProfileServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>BrowseServlet</servlet-name>
+        <servlet-class>com.dateengine.controllers.BrowseServlet</servlet-class>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>HomeServlet</servlet-name>
@@ -28,14 +32,16 @@
         <url-pattern>/profile/*</url-pattern>
     </servlet-mapping>
 
-    <filter-mapping>
-        <filter-name>RequireLoginFilter</filter-name>
-        <servlet-name>HomeServlet</servlet-name>
-    </filter-mapping>
+    <servlet-mapping>
+        <servlet-name>BrowseServlet</servlet-name>
+        <url-pattern>/browse/*</url-pattern>
+    </servlet-mapping>
 
     <filter-mapping>
         <filter-name>RequireLoginFilter</filter-name>
+        <servlet-name>HomeServlet</servlet-name>
         <servlet-name>ProfileServlet</servlet-name>
+        <servlet-name>BrowseServlet</servlet-name>
     </filter-mapping>
 
 </web-app>
