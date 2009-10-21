@@ -9,6 +9,9 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Key;
 import com.dateengine.PMF;
 
+import java.util.List;
+import java.util.LinkedList;
+
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class Profile {
 
@@ -31,6 +34,9 @@ public class Profile {
 
    @Persistent
    private String aboutMe;
+
+   @Persistent (mappedBy = "owner")
+   private List<Photo> photos = new LinkedList<Photo>();
 
    // D'oh, guess I need to update my SDK to get Geo
    // @Persistent
@@ -95,4 +101,9 @@ public class Profile {
    public void setAboutMe(String aboutMe) {
       this.aboutMe = aboutMe;
    }
+
+   public List<Photo> getPhotos() {
+      return this.photos;
+   }
+
 }

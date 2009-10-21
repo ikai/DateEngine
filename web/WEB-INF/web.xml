@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns="http://java.sun.com/xml/ns/javaee"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 		  http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-           version="2.5">
+         version="2.5">
     <filter>
         <filter-name>RequireLoginFilter</filter-name>
         <filter-class>com.dateengine.filters.RequireLoginFilter</filter-class>
@@ -21,6 +21,10 @@
         <servlet-name>BrowseServlet</servlet-name>
         <servlet-class>com.dateengine.controllers.BrowseServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>PhotoServlet</servlet-name>
+        <servlet-class>com.dateengine.controllers.PhotoServlet</servlet-class>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>HomeServlet</servlet-name>
@@ -37,11 +41,17 @@
         <url-pattern>/browse/*</url-pattern>
     </servlet-mapping>
 
+    <servlet-mapping>
+        <servlet-name>PhotoServlet</servlet-name>
+        <url-pattern>/photo/*</url-pattern>
+    </servlet-mapping>
+
     <filter-mapping>
         <filter-name>RequireLoginFilter</filter-name>
         <servlet-name>HomeServlet</servlet-name>
         <servlet-name>ProfileServlet</servlet-name>
         <servlet-name>BrowseServlet</servlet-name>
+        <servlet-name>PhotoServlet</servlet-name>
     </filter-mapping>
 
 </web-app>
