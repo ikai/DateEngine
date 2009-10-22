@@ -7,7 +7,6 @@ package com.dateengine.controllers;
 
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileItemIterator;
-import org.apache.commons.fileupload.MultipartStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import java.io.InputStream;
@@ -26,8 +25,6 @@ import com.dateengine.models.Photo;
 import com.dateengine.models.Profile;
 import com.dateengine.PMF;
 import com.google.appengine.api.datastore.Blob;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.users.User;
 
 public class PhotoServlet extends HttpServlet {
@@ -51,17 +48,21 @@ public class PhotoServlet extends HttpServlet {
                byte[] rawData = getDataFromInputStream(stream);
                stream.close();
 
+               // TODO: Get the Content-type and set it correctly so we don't just force JPEG for everything
                Photo photo = new Photo();
 
                photo.setImage(new Blob(rawData));
-               
-               // photo.setThumbnail(new Blob(rawData));
 
                photo.setCreatedAt(new Date());
 
                PersistenceManager pm = PMF.get().getPersistenceManager();
                try {
-                  pm.makePersistent(photo);
+                  User currentUser = (User) request.getAttribute("user");
+                  Profile profile = (Profile) pm.getObjectById(Profile.class, currentUser.getEmail());
+
+                  profile.setPhoto(photo);
+                  pm.makePersistent(profile);
+
                } catch (Exception e) {
                   throw new ServletException(e);
                } finally {
@@ -78,17 +79,19 @@ public class PhotoServlet extends HttpServlet {
    }
 
    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-      String keyString  = request.getParameter("key");
-      String size       = request.getParameter("size");
+      String keyString = request.getParameter("key");
+      String size = request.getParameter("size");
       PersistenceManager pm = PMF.get().getPersistenceManager();
       Photo photo = (Photo) pm.getObjectById(Photo.class, keyString);
       Blob imageData;
-      if(size.equals("full")) {
+
+      if (size != null && size.equals("full")) {
          imageData = photo.getImage();
       } else { // We set the default to just the thumbnail
          imageData = photo.getThumbnail();
       }
-      response.setContentType("image/jpeg");      
+
+      response.setContentType("image/jpeg");
       response.getOutputStream().write(imageData.getBytes());
       response.getOutputStream().flush();
 
@@ -105,7 +108,6 @@ public class PhotoServlet extends HttpServlet {
             output.write(buffer, 0, len);
          }
          rawData = output.toByteArray();
-
       } finally {
          output.close();
       }

@@ -4,6 +4,7 @@ import com.google.appengine.api.users.User;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.dateengine.models.Profile;
+import com.dateengine.models.Photo;
 import com.dateengine.PMF;
 
 import javax.servlet.http.HttpServlet;
@@ -17,9 +18,9 @@ import javax.jdo.JDOFatalUserException;
 import java.io.IOException;
 
 public class ProfileServlet extends HttpServlet {
-   private final String VIEW_PROFILE_TEMPLATE   = "/WEB-INF/templates/profile/view_profile.jsp";
-   private final String CREATE_PROFILE_TEMPLATE = "/WEB-INF/templates/profile/create_your_profile.jsp";   
-   private final String EDIT_PROFILE_TEMPLATE   = "/WEB-INF/templates/profile/edit_profile.jsp";
+   private static final String VIEW_PROFILE_TEMPLATE   = "/WEB-INF/templates/profile/view_profile.jsp";
+   private static final String CREATE_PROFILE_TEMPLATE = "/WEB-INF/templates/profile/create_your_profile.jsp";
+   private static final String EDIT_PROFILE_TEMPLATE   = "/WEB-INF/templates/profile/edit_profile.jsp";
 
 
    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -95,8 +96,12 @@ public class ProfileServlet extends HttpServlet {
 
       PersistenceManager pm = PMF.get().getPersistenceManager();
       Profile profile = null;
+      Photo photo = null;
+
       try {
          profile = pm.getObjectById(Profile.class, key);
+         photo = profile.getPhoto();
+
       } catch (JDOObjectNotFoundException e) {
          // Render a 404 or some page that says profile not found
          response.sendError(404, "Profile not found");
@@ -107,6 +112,8 @@ public class ProfileServlet extends HttpServlet {
       }
 
       request.setAttribute("profile", profile);
+      request.setAttribute("photo", photo);
+      
       RequestDispatcher dispatcher = request.getRequestDispatcher(VIEW_PROFILE_TEMPLATE);
       dispatcher.forward(request, response);
    }
@@ -118,6 +125,8 @@ public class ProfileServlet extends HttpServlet {
 
       Profile profile = Profile.findForUser(currentUser);
       request.setAttribute("profile", profile);
+      request.setAttribute("photo", profile.getPhoto());
+
       if(profile != null) {
          RequestDispatcher dispatcher = request.getRequestDispatcher(VIEW_PROFILE_TEMPLATE);
          dispatcher.forward(request, response);

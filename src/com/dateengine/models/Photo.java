@@ -10,17 +10,18 @@ import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.Transform;
 
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
+
+
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class Photo {
-   private final int THUMBNAIL_CONSTRAINT_WIDTH    = 150;
-   private final int THUMBNAIL_CONSTRAINT_HEIGHT   = 150;
+   private static final int THUMBNAIL_CONSTRAINT_WIDTH    = 150;
+   private static final int THUMBNAIL_CONSTRAINT_HEIGHT   = 150;
 
    @PrimaryKey
    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-   private Long id;
-
-//   @Persistent
-//   private Profile owner;
+   private Key key;
 
    @Persistent
    private Blob data;
@@ -34,21 +35,17 @@ public class Photo {
    @Persistent
    private Date createdAt;
 
-   public Long getId() {
-      return id;
+   public String getEncodedKey() {
+      return KeyFactory.keyToString(this.key);
    }
 
-   public void setId(Long id) {
-      this.id = id;
+   public Key getKey() {
+      return key;
    }
 
-//   public Profile getOwner() {
-//      return owner;
-//   }
-//
-//   public void setOwner(Profile owner) {
-//      this.owner = owner;
-//   }
+   public void setKey(Key key) {
+      this.key = key;
+   }
 
    public Blob getImage() {
       return data;
@@ -61,10 +58,6 @@ public class Photo {
 
    public Blob getThumbnail() {
       return thumbnail;
-   }
-
-   public void setThumbnail(Blob thumbnail) {
-      this.thumbnail = thumbnail;
    }
 
    public String getCaption() {
@@ -92,7 +85,7 @@ public class Photo {
 
       Image thumbnailImage = imagesService.applyTransform(resize, originalImage);
       byte[] thumbnailData = thumbnailImage.getImageData();
-      this.setThumbnail(new Blob(thumbnailData));
+      this.thumbnail = new Blob(thumbnailData);
    }
 
 
