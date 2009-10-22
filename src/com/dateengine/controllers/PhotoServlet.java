@@ -48,17 +48,22 @@ public class PhotoServlet extends HttpServlet {
                byte[] rawData = getDataFromInputStream(stream);
                stream.close();
 
-               // TODO: Get the Content-type and set it correctly so we don't just force JPEG for everything
-               Photo photo = new Photo();
 
-               photo.setImage(new Blob(rawData));
-
-               photo.setCreatedAt(new Date());
-
+               // TODO: Also looks like we can't change a profile photo once we've set one ...
                PersistenceManager pm = PMF.get().getPersistenceManager();
                try {
                   User currentUser = (User) request.getAttribute("user");
                   Profile profile = (Profile) pm.getObjectById(Profile.class, currentUser.getEmail());
+                  Photo photo = profile.getPhoto();
+
+                  if (photo == null) {
+                     photo = new Photo();
+                  }
+
+                  // TODO: Get the Content-type and set it correctly so we don't just force JPEG for everything
+                  photo.setImage(new Blob(rawData));
+
+                  photo.setCreatedAt(new Date());
 
                   profile.setPhoto(photo);
                   pm.makePersistent(profile);
