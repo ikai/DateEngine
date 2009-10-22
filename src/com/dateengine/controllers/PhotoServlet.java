@@ -39,42 +39,10 @@ public class PhotoServlet extends HttpServlet {
             FileItemStream item = iterator.next();
             InputStream stream = item.openStream();
 
-            if (item.isFormField()) {
-               log.warning("Got a form field: " + item.getFieldName());
-            } else {
-               log.warning("Got an uploaded file: " + item.getFieldName() +
-                       ", name = " + item.getName());
-
-               byte[] rawData = getDataFromInputStream(stream);
+            try {
+               processUpload(request, item, stream);
+            } finally {
                stream.close();
-
-
-               // TODO: Also looks like we can't change a profile photo once we've set one ...
-               PersistenceManager pm = PMF.get().getPersistenceManager();
-               try {
-                  User currentUser = (User) request.getAttribute("user");
-                  Profile profile = (Profile) pm.getObjectById(Profile.class, currentUser.getEmail());
-                  Photo photo = profile.getPhoto();
-
-                  if (photo == null) {
-                     photo = new Photo();
-                  }
-
-                  // TODO: Get the Content-type and set it correctly so we don't just force JPEG for everything
-                  photo.setImage(new Blob(rawData));
-
-                  photo.setCreatedAt(new Date());
-
-                  profile.setPhoto(photo);
-                  pm.makePersistent(profile);
-
-               } catch (Exception e) {
-                  throw new ServletException(e);
-               } finally {
-                  pm.close();
-               }
-               stream.close();
-
             }
          }
       } catch (Exception ex) {
@@ -85,10 +53,12 @@ public class PhotoServlet extends HttpServlet {
    }
 
    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-      String keyString = request.getParameter("key");
-      String size = request.getParameter("size");
+      String keyString  = request.getParameter("key");
+      String size       = request.getParameter("size");
+
       PersistenceManager pm = PMF.get().getPersistenceManager();
       Photo photo = (Photo) pm.getObjectById(Photo.class, keyString);
+
       Blob imageData;
 
       if (size != null && size.equals("full")) {
@@ -105,18 +75,50 @@ public class PhotoServlet extends HttpServlet {
 
    private byte[] getDataFromInputStream(InputStream stream) throws IOException {
       byte[] rawData;
-      ByteArrayOutputStream output = new ByteArrayOutputStream();
       int len;
       byte[] buffer = new byte[8192];
+      ByteArrayOutputStream output = new ByteArrayOutputStream();
 
       try {
-         while ((len = stream.read(buffer, 0, buffer.length)) != -1) {
-            output.write(buffer, 0, len);
-         }
+         while ((len = stream.read(buffer, 0, buffer.length)) != -1) output.write(buffer, 0, len);
          rawData = output.toByteArray();
       } finally {
          output.close();
       }
       return rawData;
    }
+
+   private void processUpload(HttpServletRequest request, FileItemStream item, InputStream stream) throws IOException, ServletException {
+      if (item.isFormField()) {
+         log.warning("Got a form field: " + item.getFieldName());
+      } else {
+         log.warning("Got an uploaded file: " + item.getFieldName() +
+                 ", name = " + item.getName());
+
+         byte[] rawData = getDataFromInputStream(stream);
+
+         // TODO: Also looks like we can't change a profile photo once we've set one ...
+         PersistenceManager pm = PMF.get().getPersistenceManager();
+         try {
+            User currentUser = (User) request.getAttribute("user");
+            Profile profile = (Profile) pm.getObjectById(Profile.class, currentUser.getEmail());
+            Photo photo = profile.getPhoto();
+
+            if (photo == null) photo = new Photo();
+
+            // TODO: Get the Content-type and set it correctly so we don't just force JPEG for everything
+            photo.setImage(new Blob(rawData));
+            photo.setCreatedAt(new Date());
+            profile.setPhoto(photo);
+            pm.makePersistent(profile);
+
+         } catch (Exception e) {
+            throw new ServletException(e);
+         } finally {
+            pm.close();
+         }
+
+      }
+   }
+
 }
