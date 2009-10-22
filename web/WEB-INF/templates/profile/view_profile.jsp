@@ -11,7 +11,7 @@
 
     <div class="aboutMe">
         <h2>About me</h2>
-        <img src="/photo?key=${photo.encodedKey}" />
+        <img src="/photo?key=${profile.photo.encodedKey}" />
         ${profile.aboutMe}
     </div>
 

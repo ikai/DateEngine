@@ -91,16 +91,13 @@ public class ProfileServlet extends HttpServlet {
 
    private void doViewProfile(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-      String encodedKey = request.getParameter("id");
-      Key key           = KeyFactory.stringToKey(encodedKey);
+      String key = request.getParameter("id");
 
       PersistenceManager pm = PMF.get().getPersistenceManager();
       Profile profile = null;
-      Photo photo = null;
 
       try {
          profile = pm.getObjectById(Profile.class, key);
-         photo = profile.getPhoto();
 
       } catch (JDOObjectNotFoundException e) {
          // Render a 404 or some page that says profile not found
@@ -112,7 +109,6 @@ public class ProfileServlet extends HttpServlet {
       }
 
       request.setAttribute("profile", profile);
-      request.setAttribute("photo", photo);
       
       RequestDispatcher dispatcher = request.getRequestDispatcher(VIEW_PROFILE_TEMPLATE);
       dispatcher.forward(request, response);
@@ -125,7 +121,6 @@ public class ProfileServlet extends HttpServlet {
 
       Profile profile = Profile.findForUser(currentUser);
       request.setAttribute("profile", profile);
-      request.setAttribute("photo", profile.getPhoto());
 
       if(profile != null) {
          RequestDispatcher dispatcher = request.getRequestDispatcher(VIEW_PROFILE_TEMPLATE);

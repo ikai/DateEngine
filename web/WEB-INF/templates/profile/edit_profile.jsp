@@ -24,6 +24,7 @@
 
 <form action="/photo/upload" method="POST" enctype="multipart/form-data">
     <p>
+        <img src="/photo?key=${profile.photo.encodedKey}" />        
         <label for="photo">Photo</label>
         <input type="file" name="photo" id="photo"/>
     </p>
