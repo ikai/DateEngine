@@ -35,8 +35,8 @@ public class Profile {
    @Persistent
    private String aboutMe;
 
-   @Persistent (mappedBy = "owner")
-   private List<Photo> photos = new LinkedList<Photo>();
+//   @Persistent (mappedBy = "owner")
+//   private List<Photo> photos = new LinkedList<Photo>();
 
    // D'oh, guess I need to update my SDK to get Geo
    // @Persistent
@@ -102,8 +102,8 @@ public class Profile {
       this.aboutMe = aboutMe;
    }
 
-   public List<Photo> getPhotos() {
-      return this.photos;
-   }
+//   public List<Photo> getPhotos() {
+//      return this.photos;
+//   }
 
 }

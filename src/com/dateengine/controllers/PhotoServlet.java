@@ -7,16 +7,28 @@ package com.dateengine.controllers;
 
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileItemIterator;
+import org.apache.commons.fileupload.MultipartStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import java.io.InputStream;
 import java.io.IOException;
+import java.io.ByteArrayOutputStream;
 import java.util.logging.Logger;
+import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.jdo.PersistenceManager;
+
+import com.dateengine.models.Photo;
+import com.dateengine.models.Profile;
+import com.dateengine.PMF;
+import com.google.appengine.api.datastore.Blob;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.users.User;
 
 public class PhotoServlet extends HttpServlet {
    private static final Logger log = Logger.getLogger(PhotoServlet.class.getName());
@@ -24,9 +36,8 @@ public class PhotoServlet extends HttpServlet {
    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
       try {
          ServletFileUpload upload = new ServletFileUpload();
-         response.setContentType("image/jpeg");
-
          FileItemIterator iterator = upload.getItemIterator(request);
+
          while (iterator.hasNext()) {
             FileItemStream item = iterator.next();
             InputStream stream = item.openStream();
@@ -37,25 +48,57 @@ public class PhotoServlet extends HttpServlet {
                log.warning("Got an uploaded file: " + item.getFieldName() +
                        ", name = " + item.getName());
 
-               // You now have the filename (item.getName() and the
-               // contents (which you can read from stream).  Here we just
-               // print them back out to the servlet output stream, but you
-               // will probably want to do something more interesting (for
-               // example, wrap them in a Blob and commit them to the
-               // datastore).
-               int len;
-               byte[] buffer = new byte[8192];
-               while ((len = stream.read(buffer, 0, buffer.length)) != -1) {
-                  response.getOutputStream().write(buffer, 0, len);
+               byte[] rawData = getDataFromInputStream(stream);
+               stream.close();
+
+               Photo photo = new Photo();
+               Blob data = new Blob(rawData);
+               photo.setImage(new Blob(rawData));
+               photo.setThumbnail(new Blob(rawData));
+               photo.setCreatedAt(new Date());
+
+               PersistenceManager pm = PMF.get().getPersistenceManager();
+               try {
+                  pm.makePersistent(photo);
+               } catch (Exception e) {
+                  throw new ServletException(e);
+               } finally {
+                  pm.close();
                }
+               stream.close();
+
             }
          }
       } catch (Exception ex) {
          throw new ServletException(ex);
       }
+
    }
 
    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      String keyString = request.getParameter("key");
+      PersistenceManager pm = PMF.get().getPersistenceManager();
+      Photo photo = (Photo) pm.getObjectById(Photo.class, keyString);
+      response.getOutputStream().write(photo.getImage().getBytes());
+      response.getOutputStream().flush();
 
+   }
+
+   private byte[] getDataFromInputStream(InputStream stream) throws IOException {
+      byte[] rawData;
+      ByteArrayOutputStream output = new ByteArrayOutputStream();
+      int len;
+      byte[] buffer = new byte[8192];
+
+      try {
+         while ((len = stream.read(buffer, 0, buffer.length)) != -1) {
+            output.write(buffer, 0, len);
+         }
+         rawData = output.toByteArray();
+
+      } finally {
+         output.close();
+      }
+      return rawData;
    }
 }
