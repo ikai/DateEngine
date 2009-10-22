@@ -5,8 +5,16 @@ import com.google.appengine.api.datastore.Blob;
 import javax.jdo.annotations.*;
 import java.util.Date;
 
+import com.google.appengine.api.images.Image;
+import com.google.appengine.api.images.ImagesService;
+import com.google.appengine.api.images.ImagesServiceFactory;
+import com.google.appengine.api.images.Transform;
+
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class Photo {
+   private final int THUMBNAIL_CONSTRAINT_WIDTH    = 150;
+   private final int THUMBNAIL_CONSTRAINT_HEIGHT   = 150;
+
    @PrimaryKey
    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
    private Long id;
@@ -48,6 +56,7 @@ public class Photo {
 
    public void setImage(Blob data) {
       this.data = data;
+      createThumbnail();
    }
 
    public Blob getThumbnail() {
@@ -73,4 +82,18 @@ public class Photo {
    public void setCreatedAt(Date createdAt) {
       this.createdAt = createdAt;
    }
+
+   private void createThumbnail() {
+
+      ImagesService imagesService = ImagesServiceFactory.getImagesService();
+
+      Image originalImage = ImagesServiceFactory.makeImage(this.getImage().getBytes());
+      Transform resize = ImagesServiceFactory.makeResize(THUMBNAIL_CONSTRAINT_WIDTH, THUMBNAIL_CONSTRAINT_HEIGHT);
+
+      Image thumbnailImage = imagesService.applyTransform(resize, originalImage);
+      byte[] thumbnailData = thumbnailImage.getImageData();
+      this.setThumbnail(new Blob(thumbnailData));
+   }
+
+
 }

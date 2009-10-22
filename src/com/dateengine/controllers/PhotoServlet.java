@@ -52,9 +52,11 @@ public class PhotoServlet extends HttpServlet {
                stream.close();
 
                Photo photo = new Photo();
-               Blob data = new Blob(rawData);
+
                photo.setImage(new Blob(rawData));
-               photo.setThumbnail(new Blob(rawData));
+               
+               // photo.setThumbnail(new Blob(rawData));
+
                photo.setCreatedAt(new Date());
 
                PersistenceManager pm = PMF.get().getPersistenceManager();
@@ -76,10 +78,18 @@ public class PhotoServlet extends HttpServlet {
    }
 
    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-      String keyString = request.getParameter("key");
+      String keyString  = request.getParameter("key");
+      String size       = request.getParameter("size");
       PersistenceManager pm = PMF.get().getPersistenceManager();
       Photo photo = (Photo) pm.getObjectById(Photo.class, keyString);
-      response.getOutputStream().write(photo.getImage().getBytes());
+      Blob imageData;
+      if(size.equals("full")) {
+         imageData = photo.getImage();
+      } else { // We set the default to just the thumbnail
+         imageData = photo.getThumbnail();
+      }
+      response.setContentType("image/jpeg");      
+      response.getOutputStream().write(imageData.getBytes());
       response.getOutputStream().flush();
 
    }
