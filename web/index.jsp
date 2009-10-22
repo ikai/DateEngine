@@ -7,6 +7,11 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-  <head><title>Simple jsp page</title></head>
-  <body>Place your content here</body>
+  <head>
+      <title>Welcome to DateEngine</title>
+  </head>
+  <body>
+    <h1>Welcome to DateEngine</h1>
+    <a href="/home">Click here to get to your home page.</a>
+  </body>
 </html>
