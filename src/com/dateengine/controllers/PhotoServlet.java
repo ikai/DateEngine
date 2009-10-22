@@ -81,6 +81,7 @@ public class PhotoServlet extends HttpServlet {
          throw new ServletException(ex);
       }
 
+      response.sendRedirect("/profile/mine");
    }
 
    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

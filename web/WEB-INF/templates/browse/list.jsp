@@ -15,6 +15,8 @@
                     <a href="/profile/view?id=${profile.encodedKey}">${profile.username}</a>
                 </h3>
                 </p>
+                    <img src="/photo?key=${profile.photo.encodedKey}" />
+
                     ${profile.aboutMe}
                 </p>
             </li>
