@@ -7,13 +7,28 @@ import javax.jdo.JDOObjectNotFoundException;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.GeoPt;
 import com.dateengine.PMF;
+
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Map;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class Profile {
 
+   /* Demonstrate use of a 1:1 Object:enum relationship */
    public enum MaritalStatus {
-      SINGLE, DIVORCED, MARRIED 
+      SINGLE, DIVORCED, MARRIED
+   }
+
+   public enum Gender {
+      MALE, FEMALE, OTHER
+   }
+
+   /* Demonstrate use of a 1:N Object:enum relationship */
+   public enum Pet {
+      DOG, CAT, MONKEY, FISH, BIRD
    }
 
    @PrimaryKey
@@ -22,7 +37,7 @@ public class Profile {
 
    @Persistent
    private String username;
-   
+
    @Persistent
    private int age;
 
@@ -30,14 +45,24 @@ public class Profile {
    private MaritalStatus maritalStatus;
 
    @Persistent
+   private Gender gender = Gender.OTHER;        // This is a default setting
+
+   @Persistent
+   private Set<Pet> pets = new HashSet<Pet>();
+
+   @Persistent
    private String aboutMe;
 
+   /*
+      Demonstrates eager fetching of child models, now when we fetch a Profile we
+      also get the corresponding photo.
+   */
    @Persistent(defaultFetchGroup = "true")
    private Photo photo;
 
    // D'oh, guess I need to update my SDK to get Geo
-   // @Persistent
-   // private GeoPt location;
+   @Persistent
+   private GeoPt location;
 
    public static Profile findForUser(User user) {
       Key key = KeyFactory.createKey(Profile.class.getSimpleName(), user.getEmail());
@@ -106,6 +131,14 @@ public class Profile {
 
    public void setPhoto(Photo photo) {
       this.photo = photo;
+   }
+
+   public void setPetsWithStringArray(String[] petNames) throws IllegalArgumentException {
+      this.pets.clear();
+      for(String petName : petNames) {
+         Pet pet = Pet.valueOf(petName);
+         this.pets.add(pet);                    
+      }
    }
 
 }

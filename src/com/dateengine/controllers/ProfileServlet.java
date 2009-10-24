@@ -4,7 +4,6 @@ import com.google.appengine.api.users.User;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.dateengine.models.Profile;
-import com.dateengine.models.Photo;
 import com.dateengine.PMF;
 
 import javax.servlet.http.HttpServlet;
@@ -63,6 +62,7 @@ public class ProfileServlet extends HttpServlet {
 
       profile.setAboutMe(request.getParameter("profile.aboutMe"));
       profile.setUsername(request.getParameter("profile.username"));
+      profile.setPetsWithStringArray(request.getParameterValues("profile.pet"));
 
       PersistenceManager pm = PMF.get().getPersistenceManager();
 
