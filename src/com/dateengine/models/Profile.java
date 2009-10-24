@@ -133,12 +133,33 @@ public class Profile {
       this.photo = photo;
    }
 
-   public void setPetsWithStringArray(String[] petNames) throws IllegalArgumentException {
+   public void setPets(String[] petNames) throws IllegalArgumentException {
       this.pets.clear();
       for(String petName : petNames) {
          Pet pet = Pet.valueOf(petName);
          this.pets.add(pet);                    
       }
    }
+
+   public Set<Pet> getPets() {
+      return this.pets;
+   }
+   
+   public void setMaritalStatus(String status) throws IllegalArgumentException {
+      if(status != null) {
+         this.maritalStatus = MaritalStatus.valueOf(status);
+      }
+   }
+
+   public void setGender(Gender gender) {
+      this.gender = gender;
+   }
+
+   public void setGender(String gender) throws IllegalArgumentException {
+      if(gender != null) {
+         this.gender = Gender.valueOf(gender);
+      }
+   }
+
 
 }

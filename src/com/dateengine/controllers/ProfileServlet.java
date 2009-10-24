@@ -62,7 +62,9 @@ public class ProfileServlet extends HttpServlet {
 
       profile.setAboutMe(request.getParameter("profile.aboutMe"));
       profile.setUsername(request.getParameter("profile.username"));
-      profile.setPetsWithStringArray(request.getParameterValues("profile.pet"));
+      profile.setPets(request.getParameterValues("profile.pet"));
+      profile.setGender(request.getParameter("profile.gender"));
+      profile.setMaritalStatus(request.getParameter("profile.maritalStatus"));
 
       PersistenceManager pm = PMF.get().getPersistenceManager();
 
