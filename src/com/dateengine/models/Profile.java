@@ -133,11 +133,14 @@ public class Profile {
       this.photo = photo;
    }
 
+   /* Hrm, should I be doing null checks at this layer? Maybe this doesn't make sense and should be moved to servlet or DAO layer */
    public void setPets(String[] petNames) throws IllegalArgumentException {
       this.pets.clear();
-      for(String petName : petNames) {
-         Pet pet = Pet.valueOf(petName);
-         this.pets.add(pet);                    
+      if(petNames != null) {
+         for(String petName : petNames) {
+            Pet pet = Pet.valueOf(petName);
+            this.pets.add(pet);
+         }
       }
    }
 
@@ -153,6 +156,10 @@ public class Profile {
 
    public void setGender(Gender gender) {
       this.gender = gender;
+   }
+
+   public Gender getGender() {
+      return this.gender;
    }
 
    public void setGender(String gender) throws IllegalArgumentException {

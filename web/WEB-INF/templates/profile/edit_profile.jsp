@@ -22,31 +22,31 @@
     <p>
         Gender:
         <label for="gender-male">Male</label>
-        <input type="radio" id="gender-male" name="profile.gender" value="MALE"/>
+        <input type="radio" id="gender-male" name="profile.gender" value="MALE" ${profile.gender == "MALE" ? "checked" : ""}/>
 
         <label for="gender-female">Female</label>
-        <input type="radio" id="gender-female" name="profile.gender" value="FEMALE"/>
+        <input type="radio" id="gender-female" name="profile.gender" value="FEMALE" ${profile.gender == "FEMALE" ? "checked" : ""}/>
 
         <label for="gender-other">Other</label>
-        <input type="radio" id="gender-other" name="profile.gender" value="OTHER"/>
+        <input type="radio" id="gender-other" name="profile.gender" value="OTHER" ${profile.gender == "OTHER" ? "checked" : ""}/>
     </p>                                           
 
     <p>
         Marital Status:
         <label for="maritalStatus-single">Single</label>
-        <input type="radio" id="maritalStatus-single" name="profile.maritalStatus" value="SINGLE"/>
+        <input type="radio" id="maritalStatus-single" name="profile.maritalStatus" value="SINGLE" ${profile.maritalStatus == "SINGLE" ? "checked" : ""}/>
 
         <label for="maritalStatus-divorced">Divorced</label>
-        <input type="radio" id="maritalStatus-divorced" name="profile.maritalStatus" value="DIVORCED"/>
+        <input type="radio" id="maritalStatus-divorced" name="profile.maritalStatus" value="DIVORCED" ${profile.maritalStatus == "DIVORCED" ? "checked" : ""}/>
 
         <label for="maritalStatus-married">Married</label>
-        <input type="radio" id="maritalStatus-married" name="profile.maritalStatus" value="MARRIED"/>
+        <input type="radio" id="maritalStatus-married" name="profile.maritalStatus" value="MARRIED" ${profile.maritalStatus == "MARRIED" ? "checked" : ""}/>
     </p>
 
     <p>
         Pets I Have:
         <label for="pet-dog">Dog</label>
-        <input type="checkbox" id="pet-dog" name="profile.pet" value="DOG"/>
+        <input type="checkbox" id="pet-dog" name="profile.pet" value="DOG"/> <!-- Need to figure out how to check if an element is in a set or not -->
         <label for="pet-cat">Cat</label>
         <input type="checkbox" id="pet-cat" name="profile.pet" value="CAT"/>
         <label for="pet-monkey">Monkey</label>
