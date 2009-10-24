@@ -1,6 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page isELIgnored="false" %>
 <%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c' %>
+<%@ taglib uri='http://com.dateengine.tld/profile' prefix='profile' %>
+
 
 <html>
 <head><title>Edit Profile</title></head>
@@ -46,15 +48,15 @@
     <p>
         Pets I Have:
         <label for="pet-dog">Dog</label>
-        <input type="checkbox" id="pet-dog" name="profile.pet" value="DOG"/> <!-- Need to figure out how to check if an element is in a set or not -->
+        <input type="checkbox" id="pet-dog" name="profile.pet" value="DOG" ${profile:hasPet(profile, "DOG") ? "checked" : ""}/>
         <label for="pet-cat">Cat</label>
-        <input type="checkbox" id="pet-cat" name="profile.pet" value="CAT"/>
+        <input type="checkbox" id="pet-cat" name="profile.pet" value="CAT" ${profile:hasPet(profile, "CAT") ? "checked" : ""}/>
         <label for="pet-monkey">Monkey</label>
-        <input type="checkbox" id="pet-monkey" name="profile.pet" value="MONKEY"/>
+        <input type="checkbox" id="pet-monkey" name="profile.pet" value="MONKEY" ${profile:hasPet(profile, "MONKEY") ? "checked" : ""}/>
         <label for="pet-fish">Fish</label>
-        <input type="checkbox" id="pet-fish" name="profile.pet" value="FISH"/>
+        <input type="checkbox" id="pet-fish" name="profile.pet" value="FISH" ${profile:hasPet(profile, "FISH") ? "checked" : ""}/>
         <label for="pet-bird">Bird</label>
-        <input type="checkbox" id="pet-bird" name="profile.pet" value="BIRD"/>
+        <input type="checkbox" id="pet-bird" name="profile.pet" value="BIRD" ${profile:hasPet(profile, "BIRD") ? "checked" : ""}/>
     </p>
 
     <p>

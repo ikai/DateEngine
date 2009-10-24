@@ -48,7 +48,7 @@ public class Profile {
    private Gender gender = Gender.OTHER;        // This is a default setting
 
    @Persistent
-   private Set<Pet> pets = new HashSet<Pet>();
+   private Set<Pet> pets;
 
    @Persistent
    private String aboutMe;
@@ -72,6 +72,12 @@ public class Profile {
       try {
          profile = pm.getObjectById(Profile.class, key);
          profile.getPhoto();
+
+         /*
+            How interesting ... even internal collections of enums are lazy fetched and need to be eager fetched while
+            the PersistenceManager instance is still open ...
+         * */
+         profile.getPets();
       } catch (JDOObjectNotFoundException e) {
          // Maybe we should do something here?         
       } finally {
@@ -79,6 +85,10 @@ public class Profile {
       }
 
       return profile;
+   }
+
+   public Profile() {
+      getPets();
    }
 
    public String getEncodedKey(){
@@ -135,6 +145,8 @@ public class Profile {
 
    /* Hrm, should I be doing null checks at this layer? Maybe this doesn't make sense and should be moved to servlet or DAO layer */
    public void setPets(String[] petNames) throws IllegalArgumentException {
+      if (this.pets == null) this.pets = new HashSet<Pet>();
+
       this.pets.clear();
       if(petNames != null) {
          for(String petName : petNames) {
@@ -145,6 +157,8 @@ public class Profile {
    }
 
    public Set<Pet> getPets() {
+      if (this.pets == null) this.pets = new HashSet<Pet>();
+      
       return this.pets;
    }
    
