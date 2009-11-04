@@ -25,6 +25,10 @@
         <servlet-name>PhotoServlet</servlet-name>
         <servlet-class>com.dateengine.controllers.PhotoServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>MessageServlet</servlet-name>
+        <servlet-class>com.dateengine.controllers.MessageServlet</servlet-class>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>HomeServlet</servlet-name>
@@ -46,12 +50,18 @@
         <url-pattern>/photo/*</url-pattern>
     </servlet-mapping>
 
+    <servlet-mapping>
+        <servlet-name>MessageServlet</servlet-name>
+        <url-pattern>/messages/*</url-pattern>
+    </servlet-mapping>
+
     <filter-mapping>
         <filter-name>RequireLoginFilter</filter-name>
         <servlet-name>HomeServlet</servlet-name>
         <servlet-name>ProfileServlet</servlet-name>
         <servlet-name>BrowseServlet</servlet-name>
         <servlet-name>PhotoServlet</servlet-name>
+        <servlet-name>MessageServlet</servlet-name>
     </filter-mapping>
 
 </web-app>

@@ -11,6 +11,7 @@
 
     <div class="aboutMe">
         <h2>About me</h2>
+        <a href="/messages/new?key=${profile.encodedKey}">Send Message</a>
         <img src="/photo?key=${profile.photo.encodedKey}" />
         ${profile.aboutMe}
     </div>
