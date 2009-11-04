@@ -65,7 +65,7 @@ public class Profile {
    private GeoPt location;
 
    public static Profile findForUser(User user) {
-      Key key = KeyFactory.createKey(Profile.class.getSimpleName(), user.getEmail());
+      Key key = KeyFactory.createKey(Profile.class.getSimpleName(), user.getUserId());
 
       PersistenceManager pm = PMF.get().getPersistenceManager();
       Profile profile = null;
