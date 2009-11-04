@@ -136,6 +136,8 @@ public class Profile {
    }
 
    public Photo getPhoto() {
+      photo.getImage();
+      photo.getThumbnail();
       return photo;
    }
 
