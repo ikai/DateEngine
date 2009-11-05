@@ -115,6 +115,6 @@ public class MessageServlet extends HttpServlet {
          pm.close();
       }
 
-      response.sendRedirect("/messages/list");
+      response.sendRedirect("/messages/inbox");
    }
 }
