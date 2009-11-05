@@ -12,8 +12,9 @@
 
 <ul class="messages">
     <c:forEach var="message" items="${messages}">
-        <li class="message">            
-            <p>${message.body}</p>
+        <li class="message">
+
+            <p>Message (${message.id}): ${message.body.value}</p>
         </li>
     </c:forEach>
 </ul>

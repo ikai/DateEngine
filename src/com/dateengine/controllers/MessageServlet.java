@@ -81,7 +81,10 @@ public class MessageServlet extends HttpServlet {
       List<Message> messages;
       try {
          messages = (List<Message>) query.execute();
-         request.setAttribute("messages", messages);
+         for(Message m : messages) {
+            m.getBody();
+         }
+        request.setAttribute("messages", messages);
       } finally {
          query.closeAll();
       }
