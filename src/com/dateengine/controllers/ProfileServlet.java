@@ -56,7 +56,7 @@ public class ProfileServlet extends HttpServlet {
       Profile profile = Profile.findForUser(currentUser);
       if(profile == null) {
          profile = new Profile();
-         Key key = KeyFactory.createKey(Profile.class.getSimpleName(), currentUser.getEmail());
+         Key key = KeyFactory.createKey(Profile.class.getSimpleName(), currentUser.getUserId());
          profile.setKey(key);
       }
 
