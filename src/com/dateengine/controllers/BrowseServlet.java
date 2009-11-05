@@ -15,6 +15,7 @@ import java.util.List;
 
 public class BrowseServlet extends HttpServlet {
 
+   @SuppressWarnings("unchecked")
    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
       PersistenceManager pm   = PMF.get().getPersistenceManager();
       Query query             = pm.newQuery(Profile.class);

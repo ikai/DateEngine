@@ -19,7 +19,7 @@ public class Message {
    @Persistent
    private Key recipientKey;
 
-   @Persistent
+   @Persistent(defaultFetchGroup = "true")   
    private Text body;
 
    @Persistent
