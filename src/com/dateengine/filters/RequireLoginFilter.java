@@ -17,6 +17,8 @@ public class RequireLoginFilter implements Filter {
       UserService userService = UserServiceFactory.getUserService();
       User user = userService.getCurrentUser();
 
+      req.setAttribute("logoutUrl", userService.createLogoutURL("/"));
+
       if(user != null) {
          req.setAttribute("user", user);
          chain.doFilter(req, resp);

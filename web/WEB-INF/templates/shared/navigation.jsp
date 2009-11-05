@@ -8,6 +8,9 @@
         <a href="/profile/mine">View My Profile</a> |
         <a href="/profile/edit">Edit Profile</a> |
         <a href="/messages/new">New Message</a> |
-        <a href="/messages/inbox">Inbox</a>
+        <a href="/messages/inbox">Inbox</a> |
+        <a href="${logoutUrl}">Logout</a>
     </span>
+
+
 </div>
